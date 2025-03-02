@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase";
+import Skeleton from "./components/UI/Sketelon";
 
 const App = () => {
     const [habbits, setHabbits] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const habbitCollectionRef = collection(db, "habbit")
 
@@ -19,11 +21,11 @@ const App = () => {
                     ...doc.data(),
                     id: doc.id
                 }))
-
                 setHabbits(filtredData)
-                console.log(filtredData)
             } catch (err) {
                 console.error(`Error in farebase: ${err}`)
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -33,13 +35,17 @@ const App = () => {
     return (
         <>
             <h1>HELLO</h1>
-            {habbits.map((habbit) => (
-                <div key={habbit.id}>
-                    <h1>{habbit.name}</h1>
-                    <input type="checkbox" checked={habbit.complened} />
-                    <p>{convertTimestampBigInt(habbit.data.seconds, habbit.data.nanoseconds).toLocaleString()}</p>
-                </div>
-            ))}
+            {loading ? (
+                <Skeleton />
+            ) : (
+                habbits.map((habbit) => (
+                    <div key={habbit.id}>
+                        <h1>{habbit.name}</h1>
+                        <input type="checkbox" checked={habbit.complened} />
+                        <p>{convertTimestampBigInt(habbit.data.seconds, habbit.data.nanoseconds).toLocaleString()}</p>
+                    </div>
+                ))
+            )}
         </>
     )
 }
