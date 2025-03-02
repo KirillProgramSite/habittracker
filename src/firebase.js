@@ -3,13 +3,13 @@ import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "fireb
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA8G7ZETbHAZ8R8wZVqqC95LqMqhC-DpG0",
-  authDomain: "habbittracker-b4f8b.firebaseapp.com",
-  projectId: "habbittracker-b4f8b",
-  storageBucket: "habbittracker-b4f8b.firebasestorage.app",
-  messagingSenderId: "1065474013232",
-  appId: "1:1065474013232:web:0f8561df9c23129bf195f5",
-  measurementId: "G-5TEH8CG9F5"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 
