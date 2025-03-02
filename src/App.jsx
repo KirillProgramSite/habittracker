@@ -1,51 +1,33 @@
 import { useEffect, useState } from "react"
-import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase";
 import Skeleton from "./components/UI/Sketelon";
+import { convertTimestampBigInt } from "./help/convertTimestampBigInt";
+import { useHabbitStore, useStoreLoading } from "./store/habbitStore";
+import HabbitList from "./components/HabbitList";
 
 const App = () => {
-    const [habbits, setHabbits] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    const habbitCollectionRef = collection(db, "habbit")
-
-    function convertTimestampBigInt(seconds, nanoseconds) {
-        const milliseconds = Number(BigInt(seconds) * 1000n + BigInt(nanoseconds) / 1_000_000n);
-        return new Date(milliseconds);
-    }
+    const {habbits, setHabbits, loadHabbitsFromDb} = useHabbitStore();
+    // const [loading, setLoading] = useState(true)
+    const {loading, setLoading} = useStoreLoading()
 
     useEffect(() => {
-        const getHabbit = async () => {
-            try {
-                const data = await getDocs(habbitCollectionRef)
-                const filtredData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id
-                }))
-                setHabbits(filtredData)
-            } catch (err) {
-                console.error(`Error in farebase: ${err}`)
-            } finally {
-                setLoading(false)
-            }
-        }
+        loadHabbitsFromDb(setLoading)
+    }, [loadHabbitsFromDb])
 
-        getHabbit()
-    }, [])
+
 
     return (
         <>
             <h1>HELLO</h1>
-            {loading ? (
-                <Skeleton />
-            ) : (
-                habbits.map((habbit) => (
-                    <div key={habbit.id}>
-                        <h1>{habbit.name}</h1>
-                        <input type="checkbox" checked={habbit.complened} />
-                        <p>{convertTimestampBigInt(habbit.data.seconds, habbit.data.nanoseconds).toLocaleString()}</p>
-                    </div>
-                ))
-            )}
+            <form action="">
+                <label htmlFor="">
+                    <p>Введите привычку которую вы хотите соблюдать:</p>
+                    <input type="text" placeholder="Введите привычку" />
+                </label>
+
+                <button type="submit">Добавить</button>
+            </form>
+
+            <HabbitList />
         </>
     )
 }
