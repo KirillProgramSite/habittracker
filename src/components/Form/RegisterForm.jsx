@@ -21,7 +21,7 @@ const RegisterForm = () => {
     
             createUser(data.email, data.password, data.username)
             reset()
-        }
+    }
 
     return (
     <form onSubmit={handleSubmit(onRegisterSubmit)}>
